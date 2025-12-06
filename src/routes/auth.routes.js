@@ -6,6 +6,10 @@ import {
 } from "../controllers/auth.controller.js";
 import customErrorHandler from "../utils/customErrorHandler.js";
 import {
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
   loginEmailValidator,
   loginPhoneValidator,
   registerUserValidator,

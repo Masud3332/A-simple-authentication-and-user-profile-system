@@ -2,7 +2,6 @@
 node_modules/
 
 # Environment variables
-.env
 
 # Firebase Admin Key
 src/firebase/serviceAccountKey.json
@@ -19,3 +18,4 @@ src/uploads/
 .idea/
 .DS_Store
 Thumbs.db
+config.bat
