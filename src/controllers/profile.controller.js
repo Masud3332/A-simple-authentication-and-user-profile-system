@@ -2,7 +2,7 @@ import fs from "fs";
 import { User } from "../models/User.model.js";
 import { apiResponseErr, apiResponseSuccess } from "../utils/serverError.js";
 import { statusCode } from "../utils/statusCodes.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { getCloudinaryPublicId, removeFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const getProfile = (req, res) => {
   try {
@@ -69,6 +69,13 @@ export const updateProfile = async (req, res) => {
         );
       }
 
+      const userData = await User.findById(req.user._id);
+
+      if (userData?.profilePicture) {
+        const oldPublicId = getCloudinaryPublicId(userData.profilePicture);
+        await removeFromCloudinary(oldPublicId);
+      }
+
       updates.profilePicture = cloudinaryResponse.url;
 
       fs.unlinkSync(req.file.path);
@@ -96,3 +103,4 @@ export const updateProfile = async (req, res) => {
     );
   }
 };
+

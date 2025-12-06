@@ -9,13 +9,13 @@ export const registerUser = async (req, res) => {
     const { name, email, phone, password, bio, location } = req.body;
 
     if (!req.file) {
-      return apiResponseErr(null, false, 400, "No file uploaded", res);
+      return apiResponseErr(null, false, statusCode.badRequest, "No file uploaded", res);
     }
 
     const uploadResult = await uploadOnCloudinary(req.file.path);
 
     if (!uploadResult || !uploadResult.url) {
-      return apiResponseErr(null, false, 400, "Failed to upload file to Cloudinary", res);
+      return apiResponseErr(null, false, statusCode.badRequest, "Failed to upload file to Cloudinary", res);
     }
 
     const user = await User.create({
@@ -30,10 +30,10 @@ export const registerUser = async (req, res) => {
 
     const token = user.generateAccessToken();
 
-    return apiResponseSuccess({ user, token }, true, 201, "Registered", res);
+    return apiResponseSuccess({ user, token }, true, statusCode.create, "User register successfully", res);
   } catch (err) {
     console.log("Register error:", err);
-    return apiResponseErr(null, false, 500, "Internal server error", res);
+    return apiResponseErr(null, false, statusCode.internalServerError, "Internal server error", res);
   }
 };
 
